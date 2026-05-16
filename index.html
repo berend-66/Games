@@ -353,11 +353,12 @@ const SP = {
   sage:      [3, 7],   // gray-haired sage
   villager:  [4, 7],   // brown-haired person
   barbarian: [1, 9],   // shirtless tan barbarian
-  redKnight: [2, 9],   // red-armored boss
   redMage:   [3, 9],   // red-robed wizard
   bandit:    [4, 9],   // green-bandana bandit
-  // monsters
+  // monsters & special
   slime:     [0, 9],
+  crab:      [2, 9],   // red armored crab (used for Stoneskin)
+  champion:  [4, 8],   // silver-armored elder warrior
   bear:      [0, 10],
   ghost:     [1, 10],
   spider:    [2, 10],
@@ -437,7 +438,7 @@ const OPPONENTS = [
     reward: { gold: 90, xp: 36 },
   },
   {
-    name: 'Cassius Stoneskin', sprite: SP.helm, weapon: SP.mace, level: 4,
+    name: 'Cassius Stoneskin', sprite: SP.crab, weapon: null, level: 4,
     stats: { str: 7, atk: 5, def: 10, vit: 10, sta: 5, cha: 4 },
     wepDmg: 6, armor: 3,
     quote: "Your blades shall break upon me like waves on a cliff.",
@@ -469,7 +470,7 @@ const OPPONENTS = [
     reward: { gold: 600, xp: 200 },
   },
   {
-    name: 'Sandalion the Eternal', sprite: SP.redKnight, weapon: SP.bigSword, level: 9,
+    name: 'Sandalion the Eternal', sprite: SP.champion, weapon: SP.bigSword, level: 9,
     stats: { str: 14, atk: 13, def: 13, vit: 16, sta: 12, cha: 12 },
     wepDmg: 16, armor: 6,
     quote: "I have been Champion for a thousand years. You will be a smear on the sand.",
@@ -657,7 +658,7 @@ function renderArena() {
   if (state.isChampion) {
     document.getElementById('opponentCard').innerHTML = `
       <div class="opp-row">
-        ${spriteEl(SP.redKnight, 's3')}
+        ${spriteEl(SP.champion, 's3')}
         <div>
           <div class="n">CHAMPION OF THE ARENA</div>
           <div class="l">You have conquered all foes.</div>
