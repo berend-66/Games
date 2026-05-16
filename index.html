@@ -118,9 +118,18 @@
 
   /* Combat */
   .combat-screen { padding: 0; background: linear-gradient(180deg, #2a1810 0%, #4a2810 50%, #2a1810 100%); }
-  .combat-arena { flex: 1; display: flex; flex-direction: column; padding: 10px; min-height: 0; }
-  .fighter-strip { display: flex; align-items: flex-end; justify-content: space-between; flex: 1; min-height: 0; padding: 14px 4px 8px; gap: 8px; position: relative; }
-  .fighter { flex: 1; display: flex; flex-direction: column; min-width: 0; gap: 8px; }
+  .combat-arena { flex: 1; display: flex; flex-direction: column; padding: 6px; min-height: 0; }
+
+  /* Intent banner */
+  .intent-banner { background: linear-gradient(180deg, #5a1818, #3a0e0e); border: 2px solid #c44; border-radius: 6px; padding: 5px 10px; text-align: center; margin: 0 4px 4px; }
+  .intent-banner.empty { background: linear-gradient(180deg, #2a1810, #1a0f08); border-color: #5c3a1a; }
+  .intent-banner .label { font-size: 9px; color: #ff9a9a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+  .intent-banner.empty .label { color: #8b6f3a; }
+  .intent-banner .text { font-size: 12px; font-weight: 700; color: #ffd86b; font-style: italic; margin-top: 1px; line-height: 1.25; }
+  .intent-banner.empty .text { color: #b89968; font-style: normal; font-size: 11px; }
+
+  .fighter-strip { display: flex; align-items: flex-end; justify-content: space-between; min-height: 0; padding: 4px 4px; gap: 8px; position: relative; }
+  .fighter { flex: 1; display: flex; flex-direction: column; min-width: 0; gap: 4px; }
   .fighter.player { align-items: flex-start; }
   .fighter.enemy { align-items: flex-end; }
   .fighter-figure { width: 96px; height: 96px; position: relative; display: flex; align-items: center; justify-content: center; transition: transform 0.15s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
@@ -143,35 +152,82 @@
     25% { transform: scaleX(-1) translateX(6px); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)) brightness(2.2) sepia(1) hue-rotate(-50deg); }
     75% { transform: scaleX(-1) translateX(-6px); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)) brightness(2.2) sepia(1) hue-rotate(-50deg); }
   }
-  /* small weapon icon overlay on fighter */
   .fighter-weapon { position: absolute; bottom: 14px; right: 0; width: 32px; height: 32px; }
   .fighter.enemy .fighter-weapon { right: auto; left: 0; }
 
+  /* Status effect icons */
+  .status-row { display: flex; gap: 3px; min-height: 22px; align-items: center; }
+  .status-icon { font-size: 13px; line-height: 1; padding: 2px 4px; background: rgba(0,0,0,0.6); border-radius: 4px; border: 1px solid #5c3a1a; display: inline-flex; align-items: center; gap: 2px; }
+  .status-icon .turns { font-size: 9px; color: #ffd86b; font-weight: 700; font-family: system-ui; }
+  .status-icon.bleed { border-color: #c44; }
+  .status-icon.burning { border-color: #f80; }
+  .status-icon.stagger { border-color: #c97bff; }
+  .status-icon.offbalance { border-color: #6bbf3a; }
+  .status-icon.inspired { border-color: #ffd86b; }
+
   .fighter-info { width: 100%; }
-  .fighter-name { font-size: 12px; font-weight: 700; color: #d4a155; margin-bottom: 3px; }
+  .fighter-name { font-size: 12px; font-weight: 700; color: #d4a155; margin-bottom: 2px; }
   .fighter.enemy .fighter-name { text-align: right; }
-  .bar { height: 14px; background: #1a0f08; border: 1px solid #5c3a1a; border-radius: 8px; overflow: hidden; position: relative; margin-bottom: 3px; }
+  .bar { height: 11px; background: #1a0f08; border: 1px solid #5c3a1a; border-radius: 6px; overflow: hidden; position: relative; margin-bottom: 2px; }
   .bar .fill { height: 100%; transition: width 0.3s; }
   .bar.hp .fill { background: linear-gradient(90deg, #c83a3a, #ff6b6b); }
   .bar.sta .fill { background: linear-gradient(90deg, #2b7a3a, #6bbf3a); }
-  .bar .text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; text-shadow: 0 1px 2px black; font-variant-numeric: tabular-nums; }
+  .bar.rage .fill { background: linear-gradient(90deg, #c97bff, #ff6bff); }
+  .bar.rage.full .fill { animation: ragePulse 0.8s ease-in-out infinite; }
+  @keyframes ragePulse { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.7) saturate(1.5); } }
+  .bar .text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-shadow: 0 1px 2px black; font-variant-numeric: tabular-nums; }
 
-  .combat-log { height: 60px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a1a; border-radius: 6px; padding: 6px 10px; overflow-y: auto; font-size: 11px; color: #d4c098; line-height: 1.5; margin: 6px 4px; }
+  /* Combo display */
+  .combo-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 8px; background: rgba(0,0,0,0.4); border: 1px solid #5c3a1a; border-radius: 6px; margin: 4px; }
+  .combo-chips { display: flex; gap: 3px; }
+  .combo-chip { padding: 3px 6px; background: #2a1810; border: 1px solid #5c3a1a; border-radius: 4px; font-size: 10px; font-weight: 700; color: #b89968; text-transform: uppercase; min-width: 22px; text-align: center; font-family: system-ui; }
+  .combo-chip.recent { background: linear-gradient(180deg, #b87333, #8b5a2b); border-color: #d4a155; color: #f5e6c8; }
+  .combo-chip.empty { opacity: 0.25; }
+  .combo-hint { color: #b89968; font-size: 10px; flex: 1; text-align: right; line-height: 1.2; }
+  .combo-hint .next { color: #ffd86b; font-weight: 700; }
+  .combo-hint.glow .next { animation: comboGlow 1s ease-in-out infinite; }
+  @keyframes comboGlow { 0%, 100% { text-shadow: 0 0 0 #ffd86b; } 50% { text-shadow: 0 0 8px #ffd86b, 0 0 14px #ffd86b; } }
+
+  .combat-log { height: 56px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a1a; border-radius: 6px; padding: 5px 10px; overflow-y: auto; font-size: 11px; color: #d4c098; line-height: 1.4; margin: 4px; }
   .combat-log .line.crit { color: #ff6b6b; font-weight: 700; }
   .combat-log .line.heal { color: #6bbf3a; }
   .combat-log .line.miss { color: #888; font-style: italic; }
   .combat-log .line.taunt { color: #c97bff; font-style: italic; }
+  .combat-log .line.combo { color: #ffd86b; font-weight: 700; }
+  .combat-log .line.phase { color: #ff6bff; font-weight: 700; text-align: center; }
 
   .float-num { position: absolute; font-weight: 800; pointer-events: none; animation: floatUp 0.9s ease-out forwards; font-size: 22px; color: #fff; text-shadow: 0 2px 4px black; z-index: 10; }
   .float-num.crit { color: #ff6b6b; font-size: 32px; }
   .float-num.miss { color: #aaa; font-style: italic; }
   @keyframes floatUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -90px); } }
 
-  .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 8px; background: linear-gradient(180deg, #1a0f08, #0a0604); border-top: 2px solid #5c3a1a; }
-  .action-btn { padding: 10px 4px; background: linear-gradient(180deg, #4a2810, #2a1810); border: 2px solid #8b5a2b; color: #f5e6c8; border-radius: 6px; font-size: 12px; font-weight: 700; box-shadow: 0 2px 0 #1a0a04; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  /* Finisher banner */
+  .finisher-banner { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(180deg, #c97bff, #5c3a8c); color: #fff; padding: 14px 28px; border: 3px solid #ffd86b; border-radius: 12px; font-size: 22px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); z-index: 300; animation: finisherIn 1.8s ease-out forwards; pointer-events: none; box-shadow: 0 0 60px rgba(255, 216, 107, 0.7); text-align: center; max-width: 90vw; }
+  @keyframes finisherIn { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); } 12% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); } 22% { transform: translate(-50%, -50%) scale(1); } 78% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -54%) scale(1); } }
+
+  /* Stance switcher */
+  .stance-row { display: flex; gap: 4px; padding: 0 4px 4px; }
+  .stance-btn { flex: 1; padding: 5px 4px; background: #2a1810; border: 1px solid #5c3a1a; border-radius: 4px; font-size: 9px; font-weight: 700; color: #b89968; text-transform: uppercase; letter-spacing: 1px; }
+  .stance-btn.active { background: linear-gradient(180deg, #8b5a2b, #5c3a1a); color: #ffd86b; border-color: #d4a155; }
+  .stance-btn .e { font-size: 14px; display: block; margin-bottom: 1px; }
+
+  /* Action grids */
+  .actions { padding: 6px; background: linear-gradient(180deg, #1a0f08, #0a0604); border-top: 2px solid #5c3a1a; }
+  .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .action-grid + .action-grid { margin-top: 5px; }
+  .action-btn { padding: 8px 2px; background: linear-gradient(180deg, #4a2810, #2a1810); border: 2px solid #8b5a2b; color: #f5e6c8; border-radius: 6px; font-size: 11px; font-weight: 700; box-shadow: 0 2px 0 #1a0a04; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 1px; }
   .action-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #1a0a04; }
-  .action-btn .c { font-size: 9px; color: #6bbf3a; opacity: 0.85; font-weight: 400; }
+  .action-btn .c { font-size: 8px; color: #6bbf3a; opacity: 0.85; font-weight: 400; }
   .action-btn.disabled { opacity: 0.35; pointer-events: none; }
+  .action-btn.combo-ready { border-color: #ffd86b; box-shadow: 0 2px 0 #1a0a04, 0 0 10px rgba(255, 216, 107, 0.5); }
+  .action-btn.special { background: linear-gradient(180deg, #c97bff, #5c3a8c); border-color: #c97bff; }
+  .action-btn.special.ready { animation: ragePulse 0.7s ease-in-out infinite; border-color: #ffd86b; }
+
+  /* Screen shake */
+  @keyframes shakeSmall { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+  @keyframes shakeBig { 0% { transform: translate(0,0); } 10% { transform: translate(-7px,-3px); } 20% { transform: translate(7px,3px); } 30% { transform: translate(-5px,3px); } 40% { transform: translate(5px,-3px); } 50% { transform: translate(-3px,-2px); } 60% { transform: translate(3px,2px); } 70% { transform: translate(-2px,-1px); } 100% { transform: translate(0,0); } }
+  .shake-small { animation: shakeSmall 0.2s; }
+  .shake-big { animation: shakeBig 0.5s; }
 
   /* Shop */
   .shop-screen h2 { color: #d4a155; text-align: center; font-size: 20px; margin-bottom: 4px; }
@@ -276,8 +332,13 @@
 <!-- Combat -->
 <div class="screen combat-screen" id="screen-combat">
   <div class="combat-arena">
+    <div class="intent-banner empty" id="intentBanner">
+      <div class="label">Awaiting</div>
+      <div class="text">—</div>
+    </div>
     <div class="fighter-strip" id="fighterStrip">
       <div class="fighter player" id="fighterPlayer">
+        <div class="status-row" id="playerStatus"></div>
         <div class="fighter-figure">
           <div class="spr s6" id="playerSprite" style="--sx:0; --sy:8;"></div>
           <div class="spr s2 fighter-weapon" id="playerWeaponSprite" style="--sx:8; --sy:8;"></div>
@@ -286,9 +347,11 @@
           <div class="fighter-name" id="playerNameLabel">You</div>
           <div class="bar hp"><div class="fill" id="playerHpFill"></div><div class="text" id="playerHpText">50/50</div></div>
           <div class="bar sta"><div class="fill" id="playerStaFill"></div><div class="text" id="playerStaText">50/50</div></div>
+          <div class="bar rage" id="playerRageBar"><div class="fill" id="playerRageFill"></div><div class="text" id="playerRageText">0/100 RAGE</div></div>
         </div>
       </div>
       <div class="fighter enemy" id="fighterEnemy">
+        <div class="status-row" id="enemyStatus" style="justify-content:flex-end;"></div>
         <div class="fighter-figure">
           <div class="spr s6" id="enemySprite" style="--sx:1; --sy:7;"></div>
           <div class="spr s2 fighter-weapon" id="enemyWeaponSprite" style="--sx:8; --sy:8;"></div>
@@ -300,9 +363,17 @@
         </div>
       </div>
     </div>
+    <div class="combo-row">
+      <div class="combo-chips" id="comboChips"></div>
+      <div class="combo-hint" id="comboHint">Build a combo to unleash a finisher</div>
+    </div>
     <div class="combat-log" id="combatLog"></div>
   </div>
-  <div class="actions" id="actions"></div>
+  <div class="actions">
+    <div class="stance-row" id="stanceRow"></div>
+    <div class="action-grid" id="actionsTop"></div>
+    <div class="action-grid" id="actionsBot"></div>
+  </div>
 </div>
 
 <!-- Stats screen -->
@@ -511,6 +582,421 @@ const GEAR = {
 const STAT_NAMES = {
   str: 'Strength', atk: 'Attack Skill', def: 'Defense Skill',
   vit: 'Vitality', sta: 'Stamina', cha: 'Charisma',
+};
+
+// ============== COMBAT DATA ==============
+
+const ACTIONS = [
+  { id: 'light',   name: 'Quick',   cost: 8,  mult: 0.75, hint: 'Fast, hits often, can bleed' },
+  { id: 'normal',  name: 'Strike',  cost: 14, mult: 1.0,  hint: 'Balanced attack' },
+  { id: 'power',   name: 'Power',   cost: 24, mult: 1.7,  hint: 'Heavy, less accurate' },
+  { id: 'feint',   name: 'Feint',   cost: 12, mult: 0,    hint: '+crit on next attack' },
+  { id: 'block',   name: 'Block',   cost: 6,  mult: 0,    hint: 'Reduce next hit by 50%' },
+  { id: 'taunt',   name: 'Taunt',   cost: 10, mult: 0,    hint: 'Chance: off-balance foe' },
+  { id: 'rest',    name: 'Rest',    cost: 0,  mult: 0,    hint: 'Recover 22 stamina' },
+  { id: 'special', name: 'Special', cost: 5,  mult: 0,    hint: 'Class ultimate', rageCost: 100 },
+];
+
+const STANCES = {
+  aggressive: { name: 'Aggressive', dmgMult: 1.25, defMult: 0.80, emoji: '⚔️' },
+  balanced:   { name: 'Balanced',   dmgMult: 1.0,  defMult: 1.0,  emoji: '⚖️' },
+  defensive:  { name: 'Defensive',  dmgMult: 0.75, defMult: 1.35, emoji: '🛡️' },
+};
+
+const TAG_SHORT = { light:'Q', normal:'S', power:'P', feint:'F', block:'B', taunt:'T', rest:'R', special:'★' };
+
+// === Enemy AI (per-opponent personality + decision) ===
+const ENEMY_AI = {
+  "Petrus the Pleb": {
+    weights: { light: 4, normal: 4, power: 1, block: 1, taunt: 0, rest: 1, feint: 0 },
+    restAt: 10, blockSkill: 0.2,
+    intent: {
+      light:  ["Petrus jabs, sort of.", "Petrus pokes with the pointy end.", "Petrus flails, doh."],
+      normal: ["Petrus swings clumsily.", "Petrus chops at the air near you.", "Doh! Petrus tries again."],
+      power:  ["Petrus heaves the blade up. Mostly.", "Big swing! Probably."],
+      block:  ["Petrus hides behind his arm.", "Petrus flinches, calls it a block."],
+      rest:   ["Petrus wheezes. Doh.", "Petrus catches his breath."],
+      feint:  ["Petrus twitches awkwardly."],
+      taunt:  ["Petrus yells, 'uh, you stink!'"]
+    }
+  },
+  "Skullface Slim": {
+    weights: { light: 6, normal: 2, power: 1, block: 1, taunt: 1, rest: 0, feint: 1 },
+    restAt: 14, blockSkill: 0.4,
+    intent: {
+      light:  ["Slim's blade whispers across bone.", "A pale slash from the dark.", "Slim grins; the cut comes red."],
+      normal: ["Slim carves a slow arc.", "Bone-white steel descends."],
+      power:  ["Slim heaves a grave-digger's blow.", "The skull on his belt rattles as he winds up."],
+      block:  ["Slim folds into shadow.", "Slim's cloak swallows the strike."],
+      rest:   ["Slim breathes graveyard air.", "Slim listens to something you can't hear."],
+      feint:  ["Slim flickers, half-there.", "Slim's silhouette splits in two."],
+      taunt:  ["Slim mouths your name. Quietly.", "Slim whispers a death no one's heard yet."]
+    }
+  },
+  "Felix the Quick": {
+    weights: { light: 5, normal: 2, power: 1, block: 1, taunt: 0, rest: 0, feint: 4 },
+    restAt: 12, blockSkill: 0.5,
+    intent: {
+      light:  ["Felix darts in, blade flashing.", "A quick cut, gone before you see it.", "Felix is already past you."],
+      normal: ["Felix slashes on the turn.", "Felix pivots and strikes."],
+      power:  ["Felix commits, fast and heavy.", "Felix drops his footwork for force."],
+      block:  ["Felix sidesteps low.", "Felix slips behind his guard."],
+      rest:   ["Felix paces, breathing easy."],
+      feint:  ["Felix shows the blade and yanks it back.", "Felix sells a strike that isn't there.", "Felix grins; the attack was a lie."],
+      taunt:  ["Felix winks. 'Too slow.'"]
+    }
+  },
+  "Cassius Stoneskin": {
+    weights: { light: 1, normal: 2, power: 4, block: 5, taunt: 0, rest: 1, feint: 0 },
+    restAt: 18, blockSkill: 0.85,
+    intent: {
+      light:  ["Cassius nips with a claw.", "A quick snap from the shell."],
+      normal: ["Cassius snaps both claws.", "Cassius scuttles forward, pincers wide."],
+      power:  ["Cassius rears; the great claw rises.", "Cassius gathers his shell and lunges.", "The crab-king brings down a hammerblow."],
+      block:  ["Cassius pulls back into his shell.", "Cassius tucks behind plated chitin.", "Stoneskin: the shell closes."],
+      rest:   ["Cassius settles, claws ticking."],
+      feint:  ["Cassius half-snaps, watching."],
+      taunt:  ["Cassius clatters his shell at you."]
+    },
+    enrage: {
+      weights: { light: 0, normal: 1, power: 9, block: 0, taunt: 0, rest: 0, feint: 0 },
+      intent: { power: ["Cassius shrieks; the shell cracks open in fury.", "No more shell. Only claws."] }
+    }
+  },
+  "Diocles the Dirty": {
+    weights: { light: 2, normal: 2, power: 1, block: 1, taunt: 3, rest: 0, feint: 4 },
+    restAt: 12, blockSkill: 0.5,
+    intent: {
+      light:  ["Diocles flicks sand at your eyes.", "A cheap little cut."],
+      normal: ["Diocles slashes with a smirk.", "Diocles goes for the ribs."],
+      power:  ["Diocles spots an opening and lunges.", "Diocles punishes the pause."],
+      block:  ["Diocles ducks behind his shield.", "Diocles cowers, briefly."],
+      rest:   ["Diocles spits, grinning."],
+      feint:  ["Diocles fakes high, eyeing low.", "Diocles dangles the bait.", "Diocles waggles his blade like a lure."],
+      taunt:  ["'Your mother fought better.'", "Diocles laughs in your face.", "Diocles makes an obscene gesture."]
+    }
+  },
+  "Lord Brutus Maximus": {
+    weights: { light: 0, normal: 1, power: 8, block: 1, taunt: 0, rest: 0, feint: 0 },
+    restAt: 22, blockSkill: 0.4,
+    intent: {
+      light:  ["Brutus deigns to jab."],
+      normal: ["Brutus swings the greatsword in a slow arc."],
+      power:  [
+        "Brutus rears back, muscles tightening, sword raised to the sun.",
+        "Brutus plants his feet, both hands on the hilt, and unleashes thunder.",
+        "Brutus inhales the arena, lifts the blade overhead, and brings it down like judgement."
+      ],
+      block:  ["Brutus raises his enormous pauldron."],
+      rest:   ["Brutus pants, lungs like a forge bellows.", "Brutus leans on his blade, gathering ruin."],
+      feint:  ["Brutus does not feint. Brutus arrives."],
+      taunt:  ["Brutus bellows your name."]
+    }
+  },
+  "The Hooded Sage": {
+    weights: { light: 1, normal: 2, power: 3, block: 2, taunt: 4, rest: 1, feint: 4 },
+    restAt: 16, blockSkill: 0.7,
+    intent: {
+      light:  ["The Sage traces a sigil in the air.", "A whisper-cut from beneath the hood."],
+      normal: ["The Sage steps once; the blade follows.", "The Sage cuts where you will be."],
+      power:  ["The Sage lifts both hands; the air thickens.", "The Sage speaks a word and strikes."],
+      block:  ["The Sage's robes harden mid-air.", "The Sage reads your hands and braces."],
+      rest:   ["The Sage breathes the runes back in."],
+      feint:  ["The Sage's shape blurs and resets.", "The Sage offers a strike that is only suggestion.", "Two blades, one real. Which?"],
+      taunt:  ["'I have already seen this fight.'", "The Sage tells you how you die.", "'Your stance betrays you.'"]
+    }
+  },
+  "Sandalion the Eternal": {
+    weights: { light: 2, normal: 3, power: 3, block: 2, taunt: 2, rest: 1, feint: 2 },
+    restAt: 20, blockSkill: 0.75,
+    intent: {
+      light:  ["Sandalion tests your guard, almost gently."],
+      normal: ["Sandalion strikes with measured grace.", "Sandalion's blade falls precisely where it must."],
+      power:  ["Sandalion gathers centuries into one blow."],
+      block:  ["Sandalion's aegis hums into place.", "Sandalion does not move. The strike will not land."],
+      rest:   ["Sandalion stands eternal, breathing slow."],
+      feint:  ["Sandalion gestures; you flinch at nothing."],
+      taunt:  [
+        "'So, you favor defense. How predictable.'",
+        "'So, you favor aggression. How brief.'",
+        "'You fight like every mortal before you.'"
+      ]
+    },
+    phase2: {
+      weights: { light: 0, normal: 1, power: 7, block: 1, taunt: 1, rest: 0, feint: 1 },
+      intent: {
+        power: [
+          "Sandalion's fury rises. He strikes with the weight of empires.",
+          "The Eternal forgets restraint; the blade comes for your spine."
+        ],
+        taunt: ["'ENOUGH.'", "Sandalion roars. The sand trembles."]
+      }
+    },
+    phase3: {
+      weights: { light: 1, normal: 1, power: 2, block: 1, taunt: 4, rest: 2, feint: 5 },
+      intent: {
+        feint:  ["Sandalion ghosts toward you, blade unreal.", "Sandalion's form splits; pick the wrong one and die."],
+        taunt:  ["'You are nothing. NOTHING.'", "'Kill me and they will only send another.'"],
+        rest:   ["Sandalion staggers. For one breath, he is mortal."],
+        power:  ["Sandalion throws everything into one last arc."]
+      }
+    }
+  }
+};
+
+function decideEnemyAction(opp, combat) {
+  const cfg = ENEMY_AI[opp.name] || ENEMY_AI["Petrus the Pleb"];
+  const cost = { light: 8, normal: 14, power: 24, block: 6, taunt: 10, rest: 0, feint: 12 };
+  let weights = { ...cfg.weights };
+  let intentPool = cfg.intent;
+  const lastP = combat.pCombo[combat.pCombo.length - 1];
+  const lights = combat.pCombo.filter(x => x === 'light').length;
+  const playerStaggered = combat.pSta < 15 || combat.pStatus.stagger;
+  const lowHp = combat.eHp / combat.eHpMax;
+
+  if (opp.name === "Cassius Stoneskin" && lowHp < 0.3) {
+    weights = { ...cfg.enrage.weights };
+    intentPool = { ...intentPool, ...cfg.enrage.intent };
+  }
+  if (opp.name === "Felix the Quick" && playerStaggered) { weights.power += 6; weights.feint = 0; }
+  if (opp.name === "Diocles the Dirty" && lastP === 'rest') weights.power += 8;
+  if (opp.name === "Diocles the Dirty" && combat.pSta < 20) { weights.power += 4; weights.normal += 2; }
+  if (opp.name === "The Hooded Sage") {
+    if (lights >= 2) weights.block += 6;
+    if (lastP === 'power') weights.feint += 4;
+    if (combat.pStance === 'defensive') weights.taunt += 3;
+  }
+  if (opp.name === "Sandalion the Eternal") {
+    if (combat.bossPhase === 2) { weights = { ...cfg.phase2.weights }; intentPool = { ...intentPool, ...cfg.phase2.intent }; }
+    else if (combat.bossPhase === 3) { weights = { ...cfg.phase3.weights }; intentPool = { ...intentPool, ...cfg.phase3.intent }; }
+  }
+  if (combat.eSta < cfg.restAt) { weights.rest = (weights.rest || 0) + 10; weights.power = 0; }
+  if (combat.eSta < 30 && opp.name !== "Sandalion the Eternal") weights.power = 0;
+  for (const k in weights) { if (cost[k] > combat.eSta && k !== 'rest') weights[k] = 0; }
+  if (cfg.blockSkill && Math.random() < cfg.blockSkill * 0.3) {
+    if (lastP === 'power' || lastP === 'normal') weights.block += 5;
+  }
+
+  const total = Object.values(weights).reduce((a, b) => a + b, 0);
+  let roll = Math.random() * total;
+  let action = 'rest';
+  for (const k in weights) { roll -= weights[k]; if (roll <= 0) { action = k; break; } }
+  const variants = intentPool[action] || intentPool.normal || ["The enemy moves."];
+  const intentText = variants[Math.floor(Math.random() * variants.length)];
+  return { action, intentText };
+}
+
+// === Combo system ===
+const COMBOS = [
+  { id: 'tripleStrike', name: 'Triple Strike', sequence: ['light', 'light', 'normal'],
+    multiplier: 1.7, bonusDmg: 2, effect: 'stagger', effectTurns: 1,
+    flavors: [ "{attacker} unleashes a relentless Triple Strike, battering {target}!",
+      "Three blurring blows land — Triple Strike on {target}!",
+      "{attacker} chains the rhythm perfect: tap, tap, CRACK!" ] },
+  { id: 'crushingBlow', name: 'Crushing Blow', sequence: ['power', 'power'],
+    multiplier: 1.9, bonusDmg: 8, effect: 'stagger', effectTurns: 1, armorPierce: true,
+    flavors: [ "{attacker}'s Crushing Blow caves through {target}'s plate!",
+      "Steel screams as {attacker}'s second swing shatters guard!",
+      "Crushing Blow — armor splinters!" ] },
+  { id: 'flurry', name: 'Flurry', sequence: ['light', 'feint', 'light', 'normal'],
+    multiplier: 2.0, bonusDmg: 4, effect: 'bleed', effectTurns: 3,
+    flavors: [ "{attacker} fakes, slips inside, erupts in a Flurry!",
+      "A heartbeat of misdirection, then a Flurry of steel!",
+      "{attacker}'s Flurry leaves four bleeding lines on {target}!" ] },
+  { id: 'counterStorm', name: 'Counter-Storm', sequence: ['block', 'power'],
+    multiplier: 2.4, bonusDmg: 6, effect: 'offbalance', effectTurns: 2, crit: true,
+    flavors: [ "{attacker} absorbs, answers with a Counter-Storm!",
+      "Shield rings, then thunder — Counter-Storm shatters {target}!",
+      "Counter-Storm! {target}'s footing breaks!" ] },
+  { id: 'trickSlash', name: 'Trick Slash', sequence: ['taunt', 'light', 'light'],
+    multiplier: 1.6, bonusDmg: 5, effect: 'bleed', effectTurns: 2, bonusVsDebuffed: 10,
+    flavors: [ "{attacker} mocks, darts, slashes — Trick Slash!",
+      "A grin, an opening, two quick reds!",
+      "{attacker}'s Trick Slash carves where it stings!" ] },
+  { id: 'battleCry', name: 'Battle Cry', sequence: ['rest', 'power'],
+    multiplier: 2.1, bonusDmg: 6, effect: 'offbalance', effectTurns: 1, selfOffbalance: true,
+    flavors: [ "{attacker} breathes, roars, swings — Battle Cry!",
+      "A throat-tearing Battle Cry, then steel!",
+      "Battle Cry — {target} buckles, {attacker} reels!" ] },
+  { id: 'inspiredStrike', name: 'Inspired Strike', sequence: ['taunt', 'normal'],
+    multiplier: 1.5, bonusDmg: 0, effect: 'inspired', effectTurns: 2,
+    flavors: [ "{attacker} taunts, then lands an Inspired Strike!",
+      "Words sting first, steel second — Inspired!",
+      "{attacker} feels the moment turn — the next will sing!" ] },
+  { id: 'berserkersWrath', name: "Berserker's Wrath", sequence: ['special', 'power', 'power'],
+    multiplier: 3.0, bonusDmg: 15, effect: 'bleed', effectTurns: 3, crit: true, armorPierce: true,
+    flavors: [ "Berserker's Wrath descends — {target} is meat under the hammer!",
+      "The arena holds its breath — Berserker's Wrath!",
+      "Three impossible blows — {target} folds!" ] },
+];
+
+function checkCombo(history) {
+  const sorted = [...COMBOS].sort((a, b) => b.sequence.length - a.sequence.length);
+  for (const c of sorted) {
+    const n = c.sequence.length;
+    if (history.length < n) continue;
+    const tail = history.slice(-n);
+    if (tail.every((a, i) => a === c.sequence[i])) return c;
+  }
+  return null;
+}
+
+function pendingCombos(history) {
+  // Return combos that would complete on the next action
+  const matches = [];
+  for (const c of COMBOS) {
+    const need = c.sequence;
+    if (history.length < need.length - 1) continue;
+    const tail = history.slice(-(need.length - 1));
+    if (tail.every((a, i) => a === need[i])) matches.push({ combo: c, next: need[need.length - 1] });
+  }
+  return matches.sort((a, b) => b.combo.multiplier - a.combo.multiplier);
+}
+
+function applyFinisher(combo, attacker, target, combat, baseDmg) {
+  const logLines = [];
+  let dmg = baseDmg * combo.multiplier + (combo.bonusDmg || 0);
+  if (combo.bonusVsDebuffed && target.statuses && Object.keys(target.statuses).length > 0) dmg += combo.bonusVsDebuffed;
+  if (combo.crit) dmg *= 1.25;
+  if (combo.armorPierce && target.armor) dmg += Math.min(target.armor, combo.bonusDmg || 0);
+  dmg = Math.round(dmg);
+  const flavor = combo.flavors[Math.floor(Math.random() * combo.flavors.length)]
+    .replace('{attacker}', attacker.name).replace('{target}', target.name);
+  logLines.push(`COMBO! ${combo.name} — ${flavor}`);
+  if (combo.selfOffbalance) {
+    attacker.selfDebuff = 'offbalance';
+    logLines.push(`${attacker.name} is off-balance from the effort!`);
+  }
+  return { damage: dmg, statusToApply: combo.effect, statusTurns: combo.effectTurns, logLines };
+}
+
+// === Status effects ===
+const STATUS_EFFECTS = {
+  bleed: { name: 'Bleed', icon: '🩸', desc: 'Loses HP each turn',
+    tick: (target, combat, stacks) => {
+      const dmg = 3 * stacks;
+      const key = target === 'player' ? 'pHp' : 'eHp';
+      combat[key] = Math.max(0, combat[key] - dmg);
+      return `${target === 'player' ? 'You bleed' : combat.opp.name + ' bleeds'} for ${dmg} HP.`;
+    }, onApply: null },
+  burning: { name: 'Burning', icon: '🔥', desc: 'Searing flames eat HP fast',
+    tick: (target, combat, stacks) => {
+      const dmg = 6 * stacks;
+      const key = target === 'player' ? 'pHp' : 'eHp';
+      combat[key] = Math.max(0, combat[key] - dmg);
+      return `${target === 'player' ? 'You burn' : combat.opp.name + ' burns'} for ${dmg} HP.`;
+    }, onApply: (target, combat) => {
+      const key = target === 'player' ? 'pHp' : 'eHp';
+      combat[key] = Math.max(0, combat[key] - 2);
+      return `Flames erupt! (-2 HP)`;
+    } },
+  stagger: { name: 'Stagger', icon: '💫', desc: 'Skips next turn',
+    tick: (target, combat, stacks) => {
+      const flag = target === 'player' ? 'pSkipTurn' : 'eSkipTurn';
+      combat[flag] = true;
+      return `${target === 'player' ? 'You are' : combat.opp.name + ' is'} staggered!`;
+    }, onApply: null },
+  offbalance: { name: 'Off-balance', icon: '🌀', desc: '-30% hit chance',
+    tick: (target, combat, stacks) => {
+      const key = target === 'player' ? 'pHitMod' : 'eHitMod';
+      combat[key] = (combat[key] || 1) * 0.7;
+      return null;
+    }, onApply: null },
+  inspired: { name: 'Inspired', icon: '⚡', desc: 'Next attack auto-crits',
+    tick: (target, combat, stacks) => {
+      const key = target === 'player' ? 'pNextCrit' : 'eNextCrit';
+      combat[key] = true;
+      return null;
+    }, onApply: (target, combat) => {
+      const key = target === 'player' ? 'pNextCrit' : 'eNextCrit';
+      combat[key] = true;
+      return `Inspiration surges!`;
+    } },
+};
+
+function applyStatus(target, effectId, turns, combat) {
+  const key = target === 'player' ? 'pStatus' : 'eStatus';
+  if (!combat[key]) combat[key] = {};
+  const existing = combat[key][effectId];
+  if (existing) {
+    existing.turns = Math.max(existing.turns, turns);
+    existing.stacks = (existing.stacks || 1) + 1;
+  } else {
+    combat[key][effectId] = { turns, stacks: 1 };
+    const eff = STATUS_EFFECTS[effectId];
+    if (eff && eff.onApply) return eff.onApply(target, combat);
+  }
+  return null;
+}
+
+function tickAllStatus(target, combat) {
+  const key = target === 'player' ? 'pStatus' : 'eStatus';
+  const lines = [];
+  const status = combat[key] || {};
+  for (const id of Object.keys(status)) {
+    const entry = status[id];
+    const eff = STATUS_EFFECTS[id];
+    if (!eff) { delete status[id]; continue; }
+    const line = eff.tick(target, combat, entry.stacks || 1);
+    if (line) lines.push(line);
+    entry.turns -= 1;
+    if (entry.turns <= 0) {
+      lines.push(`${eff.name} fades from ${target === 'player' ? 'you' : combat.opp.name}.`);
+      delete status[id];
+    }
+  }
+  return lines;
+}
+
+// === Class specials ===
+const CLASS_SPECIALS = {
+  brute: { name: "Berserker's Wrath", desc: '3× damage + bleed + stagger', cost: 100,
+    execute: (combat, player, target) => {
+      const base = (player.weaponDamage || 20) * 3;
+      return {
+        hits: [{ damage: base, isCrit: false, label: 'Wrath Strike' }],
+        applyStatus: [
+          { target: 'enemy', effect: 'bleed', turns: 4 },
+          { target: 'enemy', effect: 'bleed', turns: 4 },
+          { target: 'enemy', effect: 'bleed', turns: 4 },
+          { target: 'enemy', effect: 'stagger', turns: 1 },
+        ],
+        blockEnemyTurn: false, selfHpRestore: 0,
+        selfStaminaSet: Math.floor(combat.pStaMax * 0.25),
+        logLines: [`${player.name} roars and brings down a war cry of pure force!`,
+          `The blow lands with shattering weight!`],
+      };
+    } },
+  duelist: { name: 'Riposte Storm', desc: '4 quick hits, +crit, no retaliation', cost: 100,
+    execute: (combat, player, target) => {
+      const base = player.weaponDamage || 20;
+      const hits = [];
+      for (let i = 0; i < 4; i++) {
+        const isCrit = Math.random() < 0.5 + (player.critChance || 0.1);
+        hits.push({ damage: Math.floor(base * 0.6 * (isCrit ? 2 : 1)), isCrit, label: `Riposte ${i + 1}` });
+      }
+      return {
+        hits,
+        applyStatus: [{ target: 'enemy', effect: 'offbalance', turns: 2 }],
+        blockEnemyTurn: true, selfHpRestore: 0, selfStaminaSet: null,
+        logLines: [`${player.name} dances through ${target.name}'s guard with blinding precision!`,
+          `Four cuts in a heartbeat!`],
+      };
+    } },
+  mystic: { name: 'Searing Doom', desc: '1.2× + Burning; heal if foe already burning', cost: 100,
+    execute: (combat, player, target) => {
+      const base = Math.floor((player.weaponDamage || 20) * 1.2);
+      const alreadyBurning = combat.eStatus && combat.eStatus.burning;
+      const heal = alreadyBurning ? 0.3 : 0;
+      const lines = [`${player.name} channels arcane fire — the air ignites!`, `A pillar of searing doom crashes down!`];
+      if (alreadyBurning) lines.push(`The conflagration feeds ${player.name} — wounds knit shut!`);
+      return {
+        hits: [{ damage: base, isCrit: false, label: 'Searing Doom' }],
+        applyStatus: [{ target: 'enemy', effect: 'burning', turns: 4 }],
+        blockEnemyTurn: false, selfHpRestore: heal, selfStaminaSet: null,
+        logLines: lines,
+      };
+    } },
 };
 
 const SAVE_KEY = 'swordsandsandals_v2';
@@ -803,27 +1289,32 @@ function equipItem(slot, id) {
 }
 
 // ============== COMBAT ==============
+
 function startFight() {
   if (state.isChampion) return;
   const opp = nextOpponent();
   if (!opp) return;
+  const pMax = maxHp();
+  const sMax = maxStamina();
+  const eHp = 30 + opp.stats.vit * 5;
+  const eSta = 25 + opp.stats.sta * 3;
   combat = {
-    pHp: state.hp,
-    pHpMax: maxHp(),
-    pSta: maxStamina(),
-    pStaMax: maxStamina(),
-    eHp: 30 + opp.stats.vit * 5,
-    eHpMax: 30 + opp.stats.vit * 5,
-    eSta: 25 + opp.stats.sta * 3,
-    eStaMax: 25 + opp.stats.sta * 3,
-    opp: opp,
-    pBlock: 0,
-    eBlock: 0,
-    pTauntDebuff: 0,
-    eTauntDebuff: 0,
-    over: false,
-    busy: false,
-    log: [],
+    pHp: state.hp, pHpMax: pMax,
+    pSta: sMax, pStaMax: sMax,
+    eHp, eHpMax: eHp, eSta, eStaMax: eSta,
+    opp,
+    pRage: 0, eRage: 0,
+    pStance: 'balanced', eStance: 'balanced',
+    pCombo: [], eCombo: [],
+    pStatus: {}, eStatus: {},
+    pBlocking: 0, eBlocking: 0,
+    pFeintBuff: false, eFeintBuff: false,
+    pSkipTurn: false, eSkipTurn: false,
+    pHitMod: 1, eHitMod: 1,
+    pNextCrit: false, eNextCrit: false,
+    enemyIntent: null,
+    turn: 0, bossPhase: 1,
+    over: false, busy: false, log: [],
   };
   setSprite(document.getElementById('playerSprite'), skinSprite(state.skin));
   setSprite(document.getElementById('playerWeaponSprite'), weaponSprite());
@@ -835,49 +1326,430 @@ function startFight() {
   document.getElementById('enemyNameLabel').textContent = opp.name;
   document.getElementById('fighterPlayer').classList.remove('dead');
   document.getElementById('fighterEnemy').classList.remove('dead');
-  renderCombat();
   logLine(`The arena erupts. ${opp.name} steps onto the sand!`);
   logLine(`"${opp.quote}"`, 'taunt');
+  beginRound();
   showScreen('combat');
 }
 
+function beginRound() {
+  combat.turn++;
+  // Tick statuses (player first then enemy)
+  combat.pHitMod = 1; combat.eHitMod = 1;
+  const pLines = tickAllStatus('player', combat);
+  pLines.forEach(l => logLine(l));
+  if (combat.pHp <= 0) { renderCombat(); loseFight(); return; }
+  const eLines = tickAllStatus('enemy', combat);
+  eLines.forEach(l => logLine(l));
+  if (combat.eHp <= 0) { renderCombat(); winFight(); return; }
+  updateBossPhase();
+  // Decide enemy intent
+  combat.enemyIntent = decideEnemyAction(combat.opp, combat);
+  combat.busy = false;
+  renderCombat();
+}
+
+function doAction(actionId) {
+  if (combat.busy || combat.over) return;
+  const action = ACTIONS.find(a => a.id === actionId);
+  if (!action) return;
+  if (combat.pSta < action.cost) return;
+  if (action.rageCost && combat.pRage < action.rageCost) return;
+  combat.busy = true;
+  combat.pSta -= action.cost;
+  if (action.rageCost) combat.pRage = 0;
+
+  // Track combo
+  combat.pCombo.push(actionId);
+  if (combat.pCombo.length > 8) combat.pCombo.shift();
+
+  // Player acts
+  if (combat.pSkipTurn) {
+    logLine('You are staggered — your turn slips away!', 'miss');
+    combat.pSkipTurn = false;
+  } else {
+    resolveAction('player', action);
+  }
+
+  renderCombat();
+  if (combat.eHp <= 0) { setTimeout(winFight, 500); return; }
+
+  // Enemy acts
+  setTimeout(() => {
+    if (combat.over) return;
+    if (combat.eSkipTurn) {
+      logLine(`${combat.opp.name} is staggered — turn lost!`, 'miss');
+      combat.eSkipTurn = false;
+    } else {
+      const enemyAction = ACTIONS.find(a => a.id === combat.enemyIntent.action) || ACTIONS.find(a => a.id === 'rest');
+      combat.eSta = Math.max(0, combat.eSta - enemyAction.cost);
+      combat.eCombo.push(enemyAction.id);
+      if (combat.eCombo.length > 8) combat.eCombo.shift();
+      resolveAction('enemy', enemyAction);
+    }
+    renderCombat();
+    if (combat.pHp <= 0) { setTimeout(loseFight, 500); return; }
+
+    // End of round bookkeeping
+    combat.pSta = Math.min(combat.pStaMax, combat.pSta + 5);
+    combat.eSta = Math.min(combat.eStaMax, combat.eSta + 4);
+    combat.pBlocking = 0;
+    combat.eBlocking = 0;
+    setTimeout(beginRound, 600);
+  }, 700);
+}
+
+function resolveAction(actor, action) {
+  const isP = actor === 'player';
+  const meKey = isP ? 'p' : 'e';
+  const foeKey = isP ? 'e' : 'p';
+  const meName = isP ? state.name : combat.opp.name;
+  const foeName = isP ? combat.opp.name : state.name;
+  const foeTarget = isP ? 'enemy' : 'player';
+
+  if (action.id === 'block') {
+    combat[meKey + 'Blocking'] = 0.5;
+    logLine(`${meName} raises a guard.`);
+    return;
+  }
+  if (action.id === 'rest') {
+    combat[meKey + 'Sta'] = Math.min(combat[meKey + 'StaMax'], combat[meKey + 'Sta'] + 22);
+    logLine(`${meName} catches a breath. (+22 sta)`, 'heal');
+    return;
+  }
+  if (action.id === 'taunt') {
+    const cha = isP ? totalStats().cha : combat.opp.stats.cha;
+    if (Math.random() < 0.4 + cha * 0.04) {
+      const line = applyStatus(foeTarget, 'offbalance', 2, combat);
+      logLine(`${meName} hurls a stinging taunt — ${foeName} is rattled.`, 'taunt');
+      if (line) logLine(line);
+    } else {
+      logLine(`${meName} taunts; it lands hollow.`, 'taunt');
+    }
+    checkAndApplyCombo(actor);
+    return;
+  }
+  if (action.id === 'feint') {
+    combat[meKey + 'FeintBuff'] = true;
+    logLine(`${meName} feigns a strike — next blow will sting harder.`, 'taunt');
+    checkAndApplyCombo(actor);
+    return;
+  }
+  if (action.id === 'special') {
+    runSpecial(actor);
+    return;
+  }
+
+  // Attack actions: light, normal, power
+  const result = computeDamage(actor, action);
+  if (result.miss) {
+    animate(actor, null);
+    showDamage(foeTarget, 0, 'miss');
+    logLine(`${meName}'s ${action.name.toLowerCase()} misses.`, 'miss');
+  } else {
+    combat[foeKey + 'Hp'] = Math.max(0, combat[foeKey + 'Hp'] - result.value);
+    animate(actor, foeTarget);
+    showDamage(foeTarget, result.value, result.isCrit ? 'crit' : '');
+    logLine(`${meName}'s ${action.name.toLowerCase()} hits for ${result.value}${result.isCrit ? ' — CRIT!' : ''}.`, result.isCrit ? 'crit' : '');
+    shakeScreen(result.isCrit || result.value > 25 ? 'big' : 'small');
+    if (action.id === 'light' && Math.random() < 0.28) {
+      const line = applyStatus(foeTarget, 'bleed', 3, combat);
+      logLine(`${foeName} ${foeTarget === 'player' ? 'start' : 'starts'} to bleed!`);
+      if (line) logLine(line);
+    }
+    combat[meKey + 'Rage'] = Math.min(100, combat[meKey + 'Rage'] + (result.isCrit ? 22 : 13));
+  }
+  checkAndApplyCombo(actor);
+}
+
+function computeDamage(actor, action) {
+  const isP = actor === 'player';
+  const me = isP ? totalStats() : combat.opp.stats;
+  const foe = isP ? combat.opp.stats : totalStats();
+  const wep = isP ? weaponDmg() : combat.opp.wepDmg;
+  const myStance = STANCES[isP ? combat.pStance : combat.eStance];
+  const foeStance = STANCES[isP ? combat.eStance : combat.pStance];
+  const foeBlocking = isP ? combat.eBlocking : combat.pBlocking;
+  const myHitMod = isP ? (combat.pHitMod || 1) : (combat.eHitMod || 1);
+  const myNextCrit = isP ? combat.pNextCrit : combat.eNextCrit;
+  const myFeintBuff = isP ? combat.pFeintBuff : combat.eFeintBuff;
+
+  let chance = 0.55 + (me.atk - foe.def) * 0.045;
+  if (action.id === 'light') chance += 0.1;
+  if (action.id === 'power') chance -= 0.15;
+  chance *= myHitMod;
+  chance = Math.max(0.15, Math.min(0.95, chance));
+  if (Math.random() > chance) {
+    if (isP) combat.pHitMod = 1; else combat.eHitMod = 1;
+    return { miss: true };
+  }
+
+  let dmg = (wep + me.str * 1.4) * action.mult * (0.85 + Math.random() * 0.3);
+  dmg *= myStance.dmgMult;
+  const armor = isP ? combat.opp.armor : ((gearOf('helmet').def || 0) + (gearOf('armor').def || 0) + (gearOf('shield').def || 0)) * 0.5;
+  dmg = Math.max(1, dmg - armor);
+  dmg /= foeStance.defMult;
+  if (foeBlocking > 0) {
+    dmg *= (1 - foeBlocking);
+    if (isP) combat.eBlocking = 0; else combat.pBlocking = 0;
+  }
+  let critChance = Math.min(0.35, 0.05 + me.atk * 0.012);
+  if (myFeintBuff) { critChance += 0.35; if (isP) combat.pFeintBuff = false; else combat.eFeintBuff = false; }
+  let isCrit = Math.random() < critChance;
+  if (myNextCrit) { isCrit = true; if (isP) combat.pNextCrit = false; else combat.eNextCrit = false; }
+  if (isCrit) dmg *= 1.8;
+  if (isP) combat.pHitMod = 1; else combat.eHitMod = 1;
+  return { value: Math.round(dmg), isCrit, miss: false };
+}
+
+function checkAndApplyCombo(actor) {
+  const isP = actor === 'player';
+  const history = isP ? combat.pCombo : combat.eCombo;
+  const combo = checkCombo(history);
+  if (!combo) return;
+  const attacker = { name: isP ? state.name : combat.opp.name, statuses: isP ? combat.pStatus : combat.eStatus };
+  const target = {
+    name: isP ? combat.opp.name : state.name,
+    statuses: isP ? combat.eStatus : combat.pStatus,
+    armor: isP ? combat.opp.armor : 0,
+  };
+  const me = isP ? totalStats() : combat.opp.stats;
+  const wep = isP ? weaponDmg() : combat.opp.wepDmg;
+  const baseDmg = wep + me.str * 1.4;
+  const result = applyFinisher(combo, attacker, target, combat, baseDmg);
+  const foeKey = isP ? 'e' : 'p';
+  const foeTarget = isP ? 'enemy' : 'player';
+  combat[foeKey + 'Hp'] = Math.max(0, combat[foeKey + 'Hp'] - result.damage);
+  result.logLines.forEach(l => logLine(l, 'combo'));
+  showDamage(foeTarget, result.damage, 'crit');
+  shakeScreen('big');
+  showFinisherBanner(combo.name);
+  if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+  if (result.statusToApply) {
+    const line = applyStatus(foeTarget, result.statusToApply, result.statusTurns, combat);
+    if (line) logLine(line);
+  }
+  if (attacker.selfDebuff) {
+    const meTarget = isP ? 'player' : 'enemy';
+    const line = applyStatus(meTarget, attacker.selfDebuff, 1, combat);
+    if (line) logLine(line);
+  }
+  // Reset combo
+  if (isP) combat.pCombo = []; else combat.eCombo = [];
+}
+
+function runSpecial(actor) {
+  const isP = actor === 'player';
+  const cls = isP ? state.class : 'brute';
+  const special = CLASS_SPECIALS[cls];
+  if (!special) return;
+  const me = isP ? totalStats() : combat.opp.stats;
+  const wep = isP ? weaponDmg() : combat.opp.wepDmg;
+  const player = { name: isP ? state.name : combat.opp.name, weaponDamage: wep + me.str * 1.4, critChance: 0.1 };
+  const target = { name: isP ? combat.opp.name : state.name };
+  const result = special.execute(combat, player, target);
+  result.logLines.forEach(l => logLine(l, 'combo'));
+  showFinisherBanner(special.name);
+  shakeScreen('big');
+  const foeKey = isP ? 'e' : 'p';
+  const foeTarget = isP ? 'enemy' : 'player';
+  let totalDmg = 0;
+  result.hits.forEach((h, i) => {
+    const dealt = Math.max(1, h.damage);
+    combat[foeKey + 'Hp'] = Math.max(0, combat[foeKey + 'Hp'] - dealt);
+    totalDmg += dealt;
+    setTimeout(() => {
+      showDamage(foeTarget, dealt, h.isCrit ? 'crit' : '');
+      animate(actor, foeTarget);
+    }, i * 180);
+  });
+  logLine(`Total damage: ${totalDmg}.`, 'combo');
+  (result.applyStatus || []).forEach(s => {
+    const line = applyStatus(s.target, s.effect, s.turns, combat);
+    if (line) logLine(line);
+  });
+  if (result.selfHpRestore > 0) {
+    const myHpKey = isP ? 'pHp' : 'eHp';
+    const myMaxKey = isP ? 'pHpMax' : 'eHpMax';
+    const heal = Math.floor(combat[myMaxKey] * result.selfHpRestore);
+    combat[myHpKey] = Math.min(combat[myMaxKey], combat[myHpKey] + heal);
+    logLine(`Healed ${heal} HP!`, 'heal');
+  }
+  if (result.selfStaminaSet !== null && result.selfStaminaSet !== undefined) {
+    const myStaKey = isP ? 'pSta' : 'eSta';
+    combat[myStaKey] = result.selfStaminaSet;
+  }
+  if (result.blockEnemyTurn) combat.eSkipTurn = true;
+  checkAndApplyCombo(actor);
+}
+
+function updateBossPhase() {
+  if (combat.opp.name !== 'Sandalion the Eternal') return;
+  const ratio = combat.eHp / combat.eHpMax;
+  let newPhase = 1;
+  if (ratio <= 0.25) newPhase = 3;
+  else if (ratio <= 0.5) newPhase = 2;
+  if (newPhase > combat.bossPhase) {
+    combat.bossPhase = newPhase;
+    if (newPhase === 2) {
+      logLine('SANDALION ENRAGES! "ENOUGH!" His blade glows with fury.', 'phase');
+      showFinisherBanner('PHASE 2: RAGE');
+    } else {
+      logLine('SANDALION GROWS DESPERATE. The Eternal will not fall.', 'phase');
+      showFinisherBanner('PHASE 3: DESPERATE');
+    }
+    shakeScreen('big');
+  }
+}
+
+function switchStance(stance) {
+  if (combat.busy || combat.over) return;
+  if (combat.pStance === stance) return;
+  combat.pStance = stance;
+  logLine(`You shift into ${STANCES[stance].name} stance.`, 'taunt');
+  renderCombat();
+}
+
+function shakeScreen(intensity) {
+  const el = document.querySelector('.combat-arena');
+  if (!el) return;
+  el.classList.remove('shake-small', 'shake-big');
+  void el.offsetWidth;
+  el.classList.add('shake-' + intensity);
+  setTimeout(() => el.classList.remove('shake-small', 'shake-big'), 500);
+}
+
+function showFinisherBanner(text) {
+  const old = document.querySelector('.finisher-banner');
+  if (old) old.remove();
+  const b = document.createElement('div');
+  b.className = 'finisher-banner';
+  b.textContent = text;
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 1800);
+}
+
+// === Render ===
 function renderCombat() {
+  // Intent banner
+  const banner = document.getElementById('intentBanner');
+  if (combat.busy || combat.over || !combat.enemyIntent) {
+    banner.classList.add('empty');
+    banner.innerHTML = `<div class="label">Awaiting</div><div class="text">—</div>`;
+  } else {
+    banner.classList.remove('empty');
+    const intent = combat.enemyIntent;
+    const actionLabel = (ACTIONS.find(a => a.id === intent.action) || { name: '?' }).name;
+    banner.innerHTML = `<div class="label">Enemy intends: ${actionLabel}</div><div class="text">${intent.intentText}</div>`;
+  }
+
+  // Bars
   document.getElementById('playerHpFill').style.width = Math.max(0, combat.pHp / combat.pHpMax * 100) + '%';
-  document.getElementById('playerHpText').textContent = `${Math.max(0, Math.round(combat.pHp))}/${combat.pHpMax}`;
+  document.getElementById('playerHpText').textContent = `${Math.max(0, Math.round(combat.pHp))}/${combat.pHpMax} HP`;
   document.getElementById('playerStaFill').style.width = Math.max(0, combat.pSta / combat.pStaMax * 100) + '%';
-  document.getElementById('playerStaText').textContent = `${Math.max(0, Math.round(combat.pSta))}/${combat.pStaMax}`;
+  document.getElementById('playerStaText').textContent = `${Math.max(0, Math.round(combat.pSta))}/${combat.pStaMax} STA`;
+  document.getElementById('playerRageFill').style.width = combat.pRage + '%';
+  document.getElementById('playerRageText').textContent = `${Math.floor(combat.pRage)}/100 RAGE`;
+  document.getElementById('playerRageBar').classList.toggle('full', combat.pRage >= 100);
   document.getElementById('enemyHpFill').style.width = Math.max(0, combat.eHp / combat.eHpMax * 100) + '%';
-  document.getElementById('enemyHpText').textContent = `${Math.max(0, Math.round(combat.eHp))}/${combat.eHpMax}`;
+  document.getElementById('enemyHpText').textContent = `${Math.max(0, Math.round(combat.eHp))}/${combat.eHpMax} HP`;
   document.getElementById('enemyStaFill').style.width = Math.max(0, combat.eSta / combat.eStaMax * 100) + '%';
-  document.getElementById('enemyStaText').textContent = `${Math.max(0, Math.round(combat.eSta))}/${combat.eStaMax}`;
+  document.getElementById('enemyStaText').textContent = `${Math.max(0, Math.round(combat.eSta))}/${combat.eStaMax} STA`;
+
+  renderStatusIcons('player');
+  renderStatusIcons('enemy');
+  renderComboRow();
+  renderStanceRow();
   renderActions();
 }
 
-const ACTIONS = [
-  { id: 'light',  name: 'Quick',  cost: 8,  desc: 'Fast strike' },
-  { id: 'normal', name: 'Strike', cost: 14, desc: 'Solid hit' },
-  { id: 'power',  name: 'Power',  cost: 24, desc: 'Heavy blow' },
-  { id: 'block',  name: 'Block',  cost: 6,  desc: 'Reduce dmg' },
-  { id: 'taunt',  name: 'Taunt',  cost: 10, desc: 'Lower foe acc' },
-  { id: 'rest',   name: 'Rest',   cost: 0,  desc: 'Recover sta' },
-];
-
-function renderActions() {
-  const wrap = document.getElementById('actions');
-  wrap.innerHTML = '';
-  ACTIONS.forEach(a => {
-    const b = document.createElement('button');
-    const dis = combat.busy || combat.over || combat.pSta < a.cost;
-    b.className = 'action-btn' + (dis ? ' disabled' : '');
-    b.innerHTML = `${a.name}<div class="c">${a.cost > 0 ? a.cost + ' sta' : '+sta'}</div>`;
-    b.onclick = () => doAction(a);
-    wrap.appendChild(b);
+function renderStatusIcons(side) {
+  const el = document.getElementById((side === 'player' ? 'player' : 'enemy') + 'Status');
+  const status = side === 'player' ? combat.pStatus : combat.eStatus;
+  el.innerHTML = '';
+  Object.entries(status || {}).forEach(([id, entry]) => {
+    const eff = STATUS_EFFECTS[id];
+    if (!eff) return;
+    const d = document.createElement('div');
+    d.className = `status-icon ${id}`;
+    d.title = `${eff.name}: ${eff.desc} (${entry.turns} turns${entry.stacks > 1 ? ', x' + entry.stacks : ''})`;
+    d.innerHTML = `<span>${eff.icon}</span><span class="turns">${entry.turns}</span>`;
+    el.appendChild(d);
   });
 }
 
+function renderComboRow() {
+  const chips = document.getElementById('comboChips');
+  const hint = document.getElementById('comboHint');
+  chips.innerHTML = '';
+  const last3 = combat.pCombo.slice(-3);
+  for (let i = 0; i < 3; i++) {
+    const c = document.createElement('div');
+    const tag = last3[i];
+    if (tag) {
+      c.className = 'combo-chip recent';
+      c.textContent = TAG_SHORT[tag] || '?';
+    } else {
+      c.className = 'combo-chip empty';
+      c.textContent = '·';
+    }
+    chips.appendChild(c);
+  }
+  const pending = pendingCombos(combat.pCombo);
+  if (pending.length === 0) {
+    hint.classList.remove('glow');
+    hint.innerHTML = `Chain attacks to unlock finishers`;
+  } else {
+    const best = pending[0];
+    const nextLabel = (ACTIONS.find(a => a.id === best.next) || { name: best.next }).name;
+    hint.classList.add('glow');
+    hint.innerHTML = `Next: <span class="next">${nextLabel} → ${best.combo.name}</span>`;
+  }
+}
+
+function renderStanceRow() {
+  const row = document.getElementById('stanceRow');
+  row.innerHTML = '';
+  Object.entries(STANCES).forEach(([id, s]) => {
+    const b = document.createElement('button');
+    b.className = 'stance-btn' + (combat.pStance === id ? ' active' : '');
+    b.innerHTML = `<span class="e">${s.emoji}</span>${s.name}`;
+    b.onclick = () => switchStance(id);
+    row.appendChild(b);
+  });
+}
+
+function renderActions() {
+  const top = document.getElementById('actionsTop');
+  const bot = document.getElementById('actionsBot');
+  top.innerHTML = '';
+  bot.innerHTML = '';
+  const topIds = ['light', 'normal', 'power', 'feint'];
+  const botIds = ['block', 'taunt', 'rest', 'special'];
+  const pending = pendingCombos(combat.pCombo).map(p => p.next);
+  const makeBtn = (a) => {
+    const b = document.createElement('button');
+    const rageReq = a.rageCost || 0;
+    const cantAfford = combat.pSta < a.cost;
+    const noRage = rageReq > 0 && combat.pRage < rageReq;
+    const dis = combat.busy || combat.over || cantAfford || noRage;
+    const isSpecial = a.id === 'special';
+    const ready = isSpecial && combat.pRage >= 100;
+    const comboReady = pending.includes(a.id);
+    b.className = 'action-btn' + (dis ? ' disabled' : '') + (comboReady ? ' combo-ready' : '') + (isSpecial ? ' special' : '') + (ready ? ' ready' : '');
+    const costLabel = isSpecial ? `${rageReq} rage` : (a.cost > 0 ? `${a.cost} sta` : '+sta');
+    b.innerHTML = `${a.name}<div class="c">${costLabel}</div>`;
+    b.onclick = () => doAction(a.id);
+    return b;
+  };
+  topIds.forEach(id => { const a = ACTIONS.find(x => x.id === id); if (a) top.appendChild(makeBtn(a)); });
+  botIds.forEach(id => { const a = ACTIONS.find(x => x.id === id); if (a) bot.appendChild(makeBtn(a)); });
+}
+
 function logLine(text, cls) {
+  if (!combat) return;
   combat.log.push({ text, cls });
-  if (combat.log.length > 30) combat.log.shift();
+  if (combat.log.length > 40) combat.log.shift();
   const el = document.getElementById('combatLog');
   el.innerHTML = combat.log.map(l => `<div class="line ${l.cls || ''}">${l.text}</div>`).join('');
   el.scrollTop = el.scrollHeight;
@@ -892,137 +1764,10 @@ function showDamage(target, n, kind) {
   const f = document.createElement('div');
   f.className = 'float-num ' + (kind || '');
   f.textContent = kind === 'miss' ? 'MISS' : '-' + Math.round(n);
-  f.style.left = (rect.left - sRect.left + rect.width / 2) + 'px';
-  f.style.top = (rect.top - sRect.top) + 'px';
+  f.style.left = (rect.left - sRect.left + rect.width / 2 + (Math.random() - 0.5) * 30) + 'px';
+  f.style.top = (rect.top - sRect.top + 10) + 'px';
   strip.appendChild(f);
   setTimeout(() => f.remove(), 900);
-}
-
-function hitChance(atkSkill, defSkill, tauntDebuff) {
-  let c = 0.55 + (atkSkill - defSkill) * 0.045 - tauntDebuff;
-  return Math.max(0.15, Math.min(0.95, c));
-}
-
-function critChance(atkSkill) { return Math.min(0.3, 0.05 + atkSkill * 0.012); }
-
-function doAction(action) {
-  if (combat.busy || combat.over) return;
-  if (combat.pSta < action.cost) return;
-  combat.busy = true;
-  combat.pSta -= action.cost;
-
-  const me = totalStats();
-  const foe = combat.opp.stats;
-
-  if (action.id === 'block') {
-    combat.pBlock = 0.5;
-    logLine(`You raise your guard.`);
-  } else if (action.id === 'taunt') {
-    const success = Math.random() < 0.4 + me.cha * 0.04;
-    if (success) {
-      combat.eTauntDebuff += 0.15;
-      logLine(`You hurl an insult that lands. ${combat.opp.name} fumes.`, 'taunt');
-    } else {
-      logLine(`You taunt — but ${combat.opp.name} only laughs.`, 'taunt');
-    }
-  } else if (action.id === 'rest') {
-    combat.pSta = Math.min(combat.pStaMax, combat.pSta + 18);
-    logLine(`You catch your breath.`, 'heal');
-    combat.pBlock = 0.2;
-  } else {
-    const mult = action.id === 'light' ? 0.7 : action.id === 'power' ? 1.7 : 1.0;
-    const accMod = action.id === 'light' ? 0.1 : action.id === 'power' ? -0.15 : 0;
-    const chance = hitChance(me.atk + accMod * 20, foe.def, combat.pTauntDebuff);
-    if (Math.random() < chance) {
-      let dmg = (weaponDmg() + me.str * 1.4) * mult * (0.85 + Math.random() * 0.3);
-      dmg = Math.max(1, dmg - combat.opp.armor);
-      let isCrit = Math.random() < critChance(me.atk);
-      if (isCrit) dmg *= 1.8;
-      dmg = Math.round(dmg);
-      combat.eHp -= dmg;
-      animate('player', 'enemy');
-      showDamage('enemy', dmg, isCrit ? 'crit' : '');
-      logLine(`Your ${action.name.toLowerCase()} hits for ${dmg}${isCrit ? ' — CRITICAL!' : ''}.`, isCrit ? 'crit' : '');
-    } else {
-      animate('player', null);
-      showDamage('enemy', 0, 'miss');
-      logLine(`Your ${action.name.toLowerCase()} misses.`, 'miss');
-    }
-  }
-
-  combat.pTauntDebuff = Math.max(0, combat.pTauntDebuff - 0.05);
-  renderCombat();
-
-  if (combat.eHp <= 0) { combat.eHp = 0; renderCombat(); winFight(); return; }
-
-  setTimeout(enemyTurn, 700);
-}
-
-function enemyTurn() {
-  if (combat.over) return;
-  const opp = combat.opp;
-  let pick;
-  if (combat.eSta < 8) pick = 'rest';
-  else if (combat.eHp < combat.eHpMax * 0.3 && Math.random() < 0.35) pick = 'block';
-  else {
-    const r = Math.random();
-    if (r < 0.25 && combat.eSta >= 24) pick = 'power';
-    else if (r < 0.55) pick = 'normal';
-    else if (r < 0.85) pick = 'light';
-    else pick = 'taunt';
-  }
-  const action = ACTIONS.find(a => a.id === pick);
-  combat.eSta -= action.cost;
-
-  const foe = opp.stats;
-  const me = totalStats();
-
-  if (action.id === 'block') {
-    combat.eBlock = 0.5;
-    logLine(`${opp.name} raises their guard.`);
-  } else if (action.id === 'taunt') {
-    const success = Math.random() < 0.4 + foe.cha * 0.04;
-    const t = opp.taunts[Math.floor(Math.random() * opp.taunts.length)];
-    if (success) {
-      combat.pTauntDebuff += 0.15;
-      logLine(`${opp.name}: "${t}" — you feel rattled.`, 'taunt');
-    } else {
-      logLine(`${opp.name}: "${t}"`, 'taunt');
-    }
-  } else if (action.id === 'rest') {
-    combat.eSta = Math.min(combat.eStaMax, combat.eSta + 15);
-    logLine(`${opp.name} steps back to breathe.`, 'heal');
-    combat.eBlock = 0.2;
-  } else {
-    const mult = action.id === 'light' ? 0.7 : action.id === 'power' ? 1.7 : 1.0;
-    const accMod = action.id === 'light' ? 0.1 : action.id === 'power' ? -0.15 : 0;
-    const chance = hitChance(foe.atk + accMod * 20, me.def, combat.eTauntDebuff);
-    if (Math.random() < chance) {
-      let dmg = (opp.wepDmg + foe.str * 1.4) * mult * (0.85 + Math.random() * 0.3);
-      const myArmor = (gearOf('helmet').def || 0) + (gearOf('armor').def || 0) + (gearOf('shield').def || 0);
-      dmg = Math.max(1, dmg - myArmor * 0.5);
-      let isCrit = Math.random() < critChance(foe.atk);
-      if (isCrit) dmg *= 1.8;
-      if (combat.pBlock > 0) { dmg *= (1 - combat.pBlock); combat.pBlock = 0; }
-      dmg = Math.round(dmg);
-      combat.pHp -= dmg;
-      animate('enemy', 'player');
-      showDamage('player', dmg, isCrit ? 'crit' : '');
-      logLine(`${opp.name}'s ${action.name.toLowerCase()} hits you for ${dmg}${isCrit ? ' — CRIT!' : ''}.`, isCrit ? 'crit' : '');
-    } else {
-      animate('enemy', null);
-      showDamage('player', 0, 'miss');
-      logLine(`${opp.name}'s ${action.name.toLowerCase()} misses.`, 'miss');
-    }
-  }
-
-  combat.eTauntDebuff = Math.max(0, combat.eTauntDebuff - 0.05);
-  combat.pSta = Math.min(combat.pStaMax, combat.pSta + 6);
-  combat.eSta = Math.min(combat.eStaMax, combat.eSta + 5);
-  combat.busy = false;
-  renderCombat();
-
-  if (combat.pHp <= 0) { combat.pHp = 0; renderCombat(); loseFight(); }
 }
 
 function animate(attacker, hit) {
